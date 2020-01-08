@@ -39,3 +39,15 @@ you can also execute this program from the command line for the purpose of build
 
 ```build configuration [configurationId]```
 is the command for that.
+
+## IMPORTANT NOTES
+
+When you first run it and select a solution you most likely will have to save, go back to the list, and then select the solutiion again.
+
+## RECOMMENDATIONS
+
+1) Clean your bin and obj folders for the solution you want to turn into a template
+2) You can use the attached as a reference on how to get started
+3) This is not a perfect solution but you can always tweak it to suit your needs
+
+
