@@ -50,4 +50,4 @@ When you first run it and select a solution you most likely will have to save, g
 2) You can use the attached as a reference on how to get started
 3) This is not a perfect solution but you can always tweak it to suit your needs
 
-
+![Modified Example](configexample.png?raw=true "Xamarin Config Example")
