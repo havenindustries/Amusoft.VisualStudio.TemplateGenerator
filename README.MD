@@ -42,7 +42,10 @@ is the command for that.
 
 ## IMPORTANT NOTES
 
-When you first run it and select a solution you most likely will have to save, go back to the list, and then select the solutiion again.
+When you first run it and select a solution you most likely will have to save, go back to the list, 
+and then select the solutiion again.  NOTE: this has been intentionally limited to pretty standard 
+multi-project solutions.  If you have an unusual solution structure please go back to the original
+version of this code (where I forked from).
 
 ## RECOMMENDATIONS
 
