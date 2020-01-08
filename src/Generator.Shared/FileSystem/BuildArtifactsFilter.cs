@@ -7,12 +7,10 @@ using Microsoft.Build.Evaluation;
 
 namespace Generator.Shared.FileSystem
 {
-	public interface IIgnoreFiles
+	public class BuildArtifactsFilter : FileWalkerFilter
 	{
-		HashSet<Uri> Ignored { get; }
-	}
-	public class BuildArtifactsFilter : FileWalkerFilter, IIgnoreFiles
-	{
+		private readonly HashSet<Uri> Ignored = new HashSet<Uri>();
+
 		/// <inheritdoc />
 		public override void Initialize(string root)
 		{
@@ -44,10 +42,31 @@ namespace Generator.Shared.FileSystem
 		public override bool IsValid(string file)
 		{
 			var uri = new Uri(file, UriKind.Absolute);
-			return Ignored.All(ignored => !ignored.IsBaseOf(uri));
-		}
+		
+			var pathToFile = uri.ToString();
+			var subPath = @"/bin/";
+			pathToFile = Path.GetDirectoryName(pathToFile) + "\\";
+			string searchPath = Path.GetDirectoryName(subPath) + "\\";
+			bool containsIt = pathToFile.IndexOf(searchPath, StringComparison.OrdinalIgnoreCase) > -1;
 
-		/// <inheritdoc />
-		public HashSet<Uri> Ignored { get; } = new HashSet<Uri>();
+			if (containsIt)
+			{
+				return false;
+			}
+
+			subPath = @"/obj/";
+			pathToFile = Path.GetDirectoryName(pathToFile) + "\\";
+			searchPath = Path.GetDirectoryName(subPath) + "\\";
+			containsIt = pathToFile.IndexOf(searchPath, StringComparison.OrdinalIgnoreCase) > -1;
+
+			if (containsIt)
+			{
+				return false;
+			}
+
+			return true;
+			
+			//return Ignored.All(ignored => !ignored.IsBaseOf(uri));
+		}
 	}
 }

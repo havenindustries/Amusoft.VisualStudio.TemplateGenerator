@@ -16,6 +16,7 @@ using Generator.Shared.DependencyInjection;
 using Generator.Shared.Serialization;
 using Generator.Shared.Template;
 using Generator.Shared.Transformation;
+using MonkeyCache.FileStore;
 using NLog;
 using Folder = Generator.Shared.Template.Folder;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -125,6 +126,7 @@ namespace Generator.Shared.ViewModels
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
 					SolutionPath = dialog.FileName;
+					Barrel.Current.Add(key: "SolutionPath", data: SolutionPath, TimeSpan.FromDays(30));
 				}
 			}
 
@@ -156,12 +158,31 @@ namespace Generator.Shared.ViewModels
 		private Subject<ConfigurationViewModel> _whenSaved = new Subject<ConfigurationViewModel>();
 		public IObservable<ConfigurationViewModel> WhenSaved => _whenSaved;
 
-		private string _solutionPath;
+		public string _solutionPath;
 
-		public string SolutionPath
-		{
-			get => _solutionPath;
-			set => SetValue(ref _solutionPath, value, nameof(SolutionPath));
+		public string SolutionPath {
+
+			get
+			{
+				try
+				{
+					var solPath = Barrel.Current.Get<string>(key: "SolutionPath");
+					return solPath;
+				}
+				catch
+				{
+					return _solutionPath;
+				}
+			}
+			set
+			{
+				if (value != null)
+				{
+					SetValue(ref _solutionPath, value, nameof(SolutionPath));
+					Barrel.Current.Add(key: "SolutionPath", data: value, TimeSpan.FromDays(30));
+					_solutionPath = value;
+				}
+			}
 		}
 
 		private ObservableCollection<string> _outputFolders;
